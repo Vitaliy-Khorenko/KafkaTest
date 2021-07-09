@@ -8,10 +8,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class AppKafka {
+public class TestAppKafka {
 
     public static void main(String[] args) {
-        SpringApplication.run(AppKafka.class, args);
+        SpringApplication.run(TestAppKafka.class, args);
     }
 
     @Bean

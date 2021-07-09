@@ -1,6 +1,7 @@
 package mykafka.kafkaclient.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import mykafka.kafkaclient.TestAppKafka;
 import mykafka.kafkaclient.dto.UserDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -18,6 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
@@ -28,6 +31,7 @@ import org.springframework.kafka.test.utils.ContainerTestUtils;
 
 @EmbeddedKafka
 @SpringBootTest(properties = "spring.kafka.bootstrap-servers=${spring.embedded.kafka.brokers}")
+@Import(TestAppKafka.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserProducerTest {
 
@@ -49,13 +53,15 @@ class UserProducerTest {
 
     @BeforeAll
     void setUp() {
-        DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(getConsumerProperties());
+        DefaultKafkaConsumerFactory<String, String> consumerFactory = new DefaultKafkaConsumerFactory<>(
+                getConsumerProperties());
         ContainerProperties containerProperties = new ContainerProperties("myusers");
         container = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
         records = new LinkedBlockingQueue<>();
         container.setupMessageListener((MessageListener<String, String>) records::add);
         container.start();
-        ContainerTestUtils.waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
+        ContainerTestUtils
+                .waitForAssignment(container, embeddedKafkaBroker.getPartitionsPerTopic());
     }
 
     @Test
