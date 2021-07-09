@@ -2,13 +2,30 @@ server:
   port: 8181
 spring:
   kafka:
+    bootstrap-servers: localhost:9091
+    topic:
+      name: myusers
+    replication:
+      factor: 3
+    partition:
+      number: 2
     consumer:
-      bootstrap-servers: localhost:9091
-      group-id: group_id
+      group-id: kafka-user-listener
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            value:
+              default:
+                type: mykafka.kafkaclient.dto.UserDto
     producer:
-      bootstrap-servers: localhost:9091
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring:
+          json:
+            value:
+              default:
+                type: mykafka.kafkaclient.dto.UserDto

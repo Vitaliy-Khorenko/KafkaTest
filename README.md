@@ -33,9 +33,22 @@ Create topic
 ````
 curl --location --request POST 'http://localhost:9000/topic' \
 --header 'Accept: application/json' \
---form 'name="firsttopic"' \
+--form 'name="myusers"' \
 --form 'partitionsNumber="1"' \
 --form 'replicationFactor="1"'
 ````
 
+Step 3 Use
 
+create user
+
+```
+curl --location --request POST 'http://localhost:8181/user' \
+--form 'name="hello1"'
+```
+you can see log or getting allUsers
+
+```
+curl --location --request GET 'http://localhost:8181/user' \
+--form 'name="hello1"'
+```
