@@ -1,16 +1,15 @@
 package mykafka.kafkaclient.dto;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class GroupDtoUnitTest {
@@ -60,5 +59,4 @@ class GroupDtoUnitTest {
         GroupDto actual = mapper.readValue(source, GroupDto.class);
         assertThat(actual, is(expected));
     }
-
 }
